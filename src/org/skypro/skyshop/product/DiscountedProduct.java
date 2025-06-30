@@ -19,6 +19,10 @@ public class DiscountedProduct extends Product {
         return (int) (basicPrice * (1 - discount / 100));
     }
 
+    public double getDiscount() {
+        return discount;
+    }
+
     @Override
     public Product clone() {
         return new DiscountedProduct(this.name, this.basicPrice, this.discount);
