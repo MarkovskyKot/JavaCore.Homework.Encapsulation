@@ -7,18 +7,14 @@ public class ProductBasket {
 
     //1. Метод добавления продукта в корзину
     public void addProduct(Product product) {
-        boolean placeForProductIsEmpty = false;
         for (int i = 0; i < products.length; i++) {
             if (products[i] == null) {
-                placeForProductIsEmpty = true;
-                products[i] = new Product(product.getName(), product.getPrice());
+                products[i] = product.clone();
                 System.out.println("Товар добавлен в корзину");
-                break;
+                return;
             }
         }
-        if (!placeForProductIsEmpty) {
-            System.out.println("Невозможно добавить товар: в корзине нет места.");
-        }
+        System.out.println("Невозможно добавить товар: в корзине нет места.");
     }
 
     //2. Метод получения общей стоимости корзины
@@ -35,16 +31,21 @@ public class ProductBasket {
     //3. Метод, который печатает содержимое корзины, с проверкой на пустоту
     public void getProductsList() {
         boolean isEmpty = true;
+        int specialCounter = 0;
         for (Product product : products) {
             if (product != null) {
                 isEmpty = false;
-                System.out.println(product.getName() + ": " + product.getPrice() + "₽");
+                System.out.println(product);
+                if (product.isSpecial()) {
+                    specialCounter++;
+                }
             }
         }
         if (isEmpty) {
             System.out.println("В корзине пусто");
         } else {
             System.out.println("Итого: " + getTotalCost() + "₽");
+            System.out.println("Специальных товаров: " + specialCounter);
         }
     }
 
