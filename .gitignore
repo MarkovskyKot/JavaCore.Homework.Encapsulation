@@ -29,3 +29,4 @@ bin/
 .DS_Store
 /.idea/
 /Homework.Encapsulation.iml
+/coverage-error.log
