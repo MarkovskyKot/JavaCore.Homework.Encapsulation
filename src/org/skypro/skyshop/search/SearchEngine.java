@@ -10,9 +10,8 @@ public class SearchEngine {
 
     public void add(Searchable item) {
         if (currentIndex < searchables.length) {
-            searchables[currentIndex] = item;
+            searchables[currentIndex++] = item;
             System.out.println("*Объект добавлен*\n");
-            currentIndex++;
         } else {
             System.out.println("Больше нельзя добавить\n");
         }
@@ -23,9 +22,10 @@ public class SearchEngine {
         int foundCount = 0;
         for (Searchable item : searchables) {
             if (item != null && item.getSearchTerm().toLowerCase().contains(query.toLowerCase())) {
-                results[foundCount] = item;
-                foundCount++;
-                if (foundCount == 5) break;
+                results[foundCount++] = item;
+                if (foundCount == 5) {
+                    break;
+                }
             }
         }
         return results;
