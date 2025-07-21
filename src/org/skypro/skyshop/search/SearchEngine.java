@@ -2,39 +2,30 @@ package org.skypro.skyshop.search;
 
 import org.skypro.skyshop.exceptions.BestResultNotFound;
 
-public class SearchEngine {
-    private final Searchable[] searchables;
-    private int currentIndex = 0;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-    public SearchEngine(int capacity) {
-        this.searchables = new Searchable[capacity];
-    }
+public class SearchEngine {
+    List<Searchable> searchableList = new LinkedList<>();
 
     public void add(Searchable item) {
-        if (currentIndex < searchables.length) {
-            searchables[currentIndex++] = item;
-            System.out.println("*Объект добавлен*\n");
-        } else {
-            System.out.println("Больше нельзя добавить\n");
-        }
+        searchableList.add(item);
+        System.out.println("*Объект добавлен*\n");
     }
 
-    public Searchable[] search(String query) {
-        Searchable[] results = new Searchable[5];
-        int foundCount = 0;
-        for (Searchable item : searchables) {
+    public List<Searchable> search(String query) {
+        List<Searchable> results = new ArrayList<>();
+        for (Searchable item : searchableList) {
             if (item != null && item.getSearchTerm().toLowerCase().contains(query.toLowerCase())) {
-                results[foundCount++] = item;
-                if (foundCount == 5) {
-                    break;
-                }
+                results.add(item);
             }
         }
         return results;
     }
 
     public Searchable getBestSearchable(String search) throws BestResultNotFound {
-        if (search == null || search.isEmpty()) {
+        if (search == null || search.isEmpty() || searchableList.isEmpty()) {
             throw new BestResultNotFound(search);
         }
 
@@ -42,7 +33,7 @@ public class SearchEngine {
         int maxCount = 0;
         String searchLower = search.toLowerCase();
 
-        for (Searchable s : searchables) {
+        for (Searchable s : searchableList) {
             if (s == null || s.getSearchTerm() == null) {
                 continue;
             }

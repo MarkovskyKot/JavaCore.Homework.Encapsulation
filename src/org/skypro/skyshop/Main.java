@@ -1,5 +1,6 @@
 package org.skypro.skyshop;
 
+import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.content.Article;
 import org.skypro.skyshop.exceptions.BestResultNotFound;
 import org.skypro.skyshop.product.DiscountedProduct;
@@ -18,6 +19,9 @@ public class Main {
         Product product4 = new DiscountedProduct("Куртка", 14900, 20);
         Product product5 = new FixPriceProduct("Набор кухонных ножей");
         Product product6 = new FixPriceProduct("Набор инструментов");
+        Product product7 = new DiscountedProduct("Куртка", 18900, 15);
+        Product product8 = new DiscountedProduct("Куртка", 9900, 10);
+        Product product9 = new DiscountedProduct("Куртка", 34900, 25);
 
         //Демонстрация проверки данных
         try {
@@ -28,23 +32,50 @@ public class Main {
         }
 
         try {
-            product1 = new SimpleProduct("   ", 69990);
+            product1 = new SimpleProduct("Фен Dyson", 69990);
             System.out.println("Объект создан");
         } catch (IllegalArgumentException e) {
             System.out.println("Ошибка создания объекта: " + e.getMessage());
         }
 
         try {
-            product2 = new SimpleProduct("Смартфон infinix", 0);
+            product2 = new SimpleProduct("Смартфон infinix", 15990);
         } catch (IllegalArgumentException e) {
             System.out.println("Ошибка создания объекта: " + e.getMessage());
         }
 
         try {
-            product3 = new DiscountedProduct("Велосипед HOT WOLF", 36990, 300);
+            product3 = new DiscountedProduct("Велосипед HOT WOLF", 36990, 30);
         } catch (IllegalArgumentException e) {
             System.out.println("Ошибка создания объекта: " + e.getMessage());
         }
+        ProductBasket productBasket = new ProductBasket();
+        productBasket.addProduct(product0);
+        productBasket.addProduct(product1);
+        productBasket.addProduct(product2);
+        productBasket.addProduct(product3);
+        productBasket.addProduct(product4);
+        productBasket.addProduct(product5);
+        productBasket.addProduct(product6);
+        productBasket.addProduct(product7);
+        productBasket.addProduct(product8);
+        productBasket.addProduct(product9);
+        System.out.println(productBasket.findProductByName("куртка"));
+        System.out.println();
+        productBasket.getProductsList();
+        System.out.println();
+        System.out.println(productBasket.deleteProductByName("курТка"));
+        System.out.println();
+        productBasket.getProductsList();
+        System.out.println();
+        System.out.println(productBasket.deleteProductByName("куртка"));
+        System.out.println();
+        productBasket.getProductsList();
+        productBasket.clearBasket();
+        productBasket.getProductsList();
+
+
+
 
         Article article0 = new Article("Обзор PlayStation 5", "Могу ли я рекомендовать PS5 к покупке?" +
                 " Скорее да, чем нет." +
@@ -68,10 +99,7 @@ public class Main {
                 "*Список инструментов входящих в набор, описание, характеристики...*");
         System.out.println();
 
-        System.out.println(article0);
-        System.out.println(article1);
-
-        SearchEngine engine = new SearchEngine(20);
+        SearchEngine engine = new SearchEngine();
         engine.add(product0);
         engine.add(article0);
         engine.add(product1);
@@ -86,6 +114,13 @@ public class Main {
         engine.add(article5);
         engine.add(product6);
         engine.add(article6);
+        engine.add(product7);
+        engine.add(product8);
+        engine.add(product9);
+
+        //Демонстрация обновлённого метода search
+        System.out.println(engine.search("т"));
+        System.out.println();
 
         //Демонстрация нового метода поиска
         try {
