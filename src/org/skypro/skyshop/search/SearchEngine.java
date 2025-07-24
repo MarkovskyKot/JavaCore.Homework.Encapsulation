@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SearchEngine {
-    List<Searchable> searchableList = new LinkedList<>();
+    private final List<Searchable> searchableList = new LinkedList<>();
 
     public void add(Searchable item) {
         searchableList.add(item);

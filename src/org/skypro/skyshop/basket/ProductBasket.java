@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ProductBasket {
-    List<Product> productList = new LinkedList<>();
+    private final List<Product> productList = new LinkedList<>();
 
     //1. Метод добавления продукта в корзину
     public void addProduct(Product product) {
