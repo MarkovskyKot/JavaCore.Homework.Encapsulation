@@ -2,26 +2,29 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ProductBasket {
-    private final List<Product> productList = new LinkedList<>();
+    private final Map<String, List<Product>> productMap = new TreeMap<>();
 
     //1. Метод добавления продукта в корзину
     public void addProduct(Product product) {
-        productList.add(product);
+        if (product == null || product.getName() == null) {
+            return;
+        }
+        String name = product.getName().toLowerCase();
+        productMap.computeIfAbsent(name, k -> new ArrayList<>()).add(product);
         System.out.println("Товар добавлен в корзину");
     }
 
     //2. Метод получения общей стоимости корзины
     public int getTotalCost() {
         int totalCost = 0;
-        for (Product product : productList) {
-            if (product != null) {
-                totalCost += product.getPrice();
+        for (List<Product> products : productMap.values()) {
+            for (Product product : products) {
+                if (product != null) {
+                    totalCost += product.getPrice();
+                }
             }
         }
         return totalCost;
@@ -29,67 +32,53 @@ public class ProductBasket {
 
     //3. Метод, который печатает содержимое корзины, с проверкой на пустоту
     public void getProductsList() {
-        boolean isEmpty = true;
-        int specialCounter = 0;
-        for (Product product : productList) {
-            if (product != null) {
-                isEmpty = false;
+        if (productMap.isEmpty()) {
+            System.out.println("В корзине пусто");
+            return;
+        }
+
+        //Печать товаров по категориям (в перспективе на расширение магазина)
+        for (Map.Entry<String, List<Product>> entry : productMap.entrySet()) {
+            String name = entry.getKey();
+            List<Product> products = entry.getValue();
+
+            System.out.println("=== " + name + " ===");
+            for (Product product : products) {
                 System.out.println(product);
+            }
+        }
+
+        //Подсчёт спецтоваров
+        int specialCounter = 0;
+        for (List<Product> products : productMap.values()) {
+            for (Product product : products) {
                 if (product.isSpecial()) {
                     specialCounter++;
                 }
             }
         }
-        if (isEmpty) {
-            System.out.println("В корзине пусто");
-        } else {
-            System.out.println("Итого: " + getTotalCost() + "₽");
-            System.out.println("Специальных товаров: " + specialCounter);
-        }
+
+        System.out.println("Итого: " + getTotalCost() + "₽");
+        System.out.println("Специальных товаров: " + specialCounter);
     }
 
     //4. Метод, проверяющий продукт в корзине по имени
     public boolean findProductByName(String name) {
-        if (name == null) return false;
-        for (Product product : productList) {
-            if (product != null
-                    && product.getName() != null
-                    && name.equalsIgnoreCase(product.getName())) {
-                return true;
-            }
-        }
-        return false;
+        return name != null && productMap.containsKey(name.toLowerCase());
     }
 
     //5. Метод очистки корзины
     public void clearBasket() {
-        productList.clear();
+        productMap.clear();
         System.out.println("Корзина очищена");
     }
 
     //6.Метод удаления продукта по имени из корзины
     public List<Product> deleteProductByName(String name) {
-        List<Product> deletedProducts = new ArrayList<>();
-
-        if (name == null || name.isBlank() || productList.isEmpty()) {
-            return deletedProducts;
+        if (name == null || name.isBlank()) {
+            return Collections.emptyList();
         }
-
-        Iterator<Product> iterator = productList.listIterator();
-
-        while (iterator.hasNext()) {
-            Product product = iterator.next();
-            if (product != null
-                    && product.getName() != null
-                    && name.equalsIgnoreCase(product.getName())) {
-                deletedProducts.add(product);
-                iterator.remove();
-            }
-        }
-        if (deletedProducts.isEmpty()) {
-            System.out.println("Список пуст");
-        }
-
-        return deletedProducts;
+        List<Product> deletedProducts = productMap.remove(name.toLowerCase());
+        return deletedProducts != null ? deletedProducts : Collections.emptyList();
     }
 }
