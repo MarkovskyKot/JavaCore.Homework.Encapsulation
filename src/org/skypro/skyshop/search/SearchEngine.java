@@ -6,10 +6,7 @@ import java.util.*;
 
 public class SearchEngine {
     private final Set<Searchable> searchableSet = new HashSet<>();
-    private static final Comparator<Searchable> LENGTH_THEN_NATURAL_ORDER= (s1, s2) -> {
-        int lengthCompare = Integer.compare(s2.getName().length(), s1.getName().length());
-        return lengthCompare != 0 ? lengthCompare : s1.getName().compareTo(s2.getName());
-    };
+    private final Comparator<Searchable> comparator = new SearchableComparator();
 
     public void add(Searchable item) {
         if (item != null) {
@@ -19,20 +16,20 @@ public class SearchEngine {
     }
 
     public Set<Searchable> search(String query) {
-        Set<Searchable> resultMap = new TreeSet<>(LENGTH_THEN_NATURAL_ORDER);
+        Set<Searchable> resultSet = new TreeSet<>(comparator);
 
         if (query == null || query.isEmpty()) {
-            return resultMap;
+            return resultSet;
         }
         String queryLower = query.toLowerCase();
         for (Searchable item : searchableSet) {
             if (item != null
                     && item.getSearchTerm() != null
                     && item.getSearchTerm().toLowerCase().contains(queryLower)) {
-                    resultMap.add(item);
+                    resultSet.add(item);
             }
         }
-        return resultMap;
+        return resultSet;
     }
 
     public Searchable getBestSearchable(String search) throws BestResultNotFound {
