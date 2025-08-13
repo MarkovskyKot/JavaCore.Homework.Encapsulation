@@ -5,32 +5,35 @@ import org.skypro.skyshop.exceptions.BestResultNotFound;
 import java.util.*;
 
 public class SearchEngine {
-    private final List<Searchable> searchableList = new LinkedList<>();
+    private final Set<Searchable> searchableSet = new HashSet<>();
+    private final Comparator<Searchable> comparator = new SearchableComparator();
 
     public void add(Searchable item) {
-        searchableList.add(item);
-        System.out.println("*Объект добавлен*\n");
+        if (item != null) {
+            searchableSet.add(item);
+            System.out.println("*Объект добавлен*\n");
+        }
     }
 
-    public Map<String, Searchable> search(String query) {
-        Map<String, Searchable> resultMap = new TreeMap<>();
+    public Set<Searchable> search(String query) {
+        Set<Searchable> resultSet = new TreeSet<>(comparator);
 
         if (query == null || query.isEmpty()) {
-            return resultMap;
+            return resultSet;
         }
         String queryLower = query.toLowerCase();
-        for (Searchable item : searchableList) {
-            if (item != null && item.getSearchTerm() != null && item.getSearchTerm().toLowerCase().contains(queryLower)) {
-                if (!resultMap.containsKey(item.getName())) {
-                    resultMap.put(item.getName(), item);
-                }
+        for (Searchable item : searchableSet) {
+            if (item != null
+                    && item.getSearchTerm() != null
+                    && item.getSearchTerm().toLowerCase().contains(queryLower)) {
+                    resultSet.add(item);
             }
         }
-        return resultMap;
+        return resultSet;
     }
 
     public Searchable getBestSearchable(String search) throws BestResultNotFound {
-        if (search == null || search.isEmpty() || searchableList.isEmpty()) {
+        if (search == null || search.isEmpty() || searchableSet.isEmpty()) {
             throw new BestResultNotFound(search);
         }
 
@@ -38,7 +41,7 @@ public class SearchEngine {
         int maxCount = 0;
         String searchLower = search.toLowerCase();
 
-        for (Searchable s : searchableList) {
+        for (Searchable s : searchableSet) {
             if (s == null || s.getSearchTerm() == null) {
                 continue;
             }
