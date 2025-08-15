@@ -19,15 +19,11 @@ public class ProductBasket {
 
     //2. Метод получения общей стоимости корзины
     public int getTotalCost() {
-        int totalCost = 0;
-        for (List<Product> products : productMap.values()) {
-            for (Product product : products) {
-                if (product != null) {
-                    totalCost += product.getPrice();
-                }
-            }
-        }
-        return totalCost;
+        return productMap.values().stream()
+                .flatMap(List::stream)
+                .filter(Objects::nonNull)
+                .mapToInt(Product::getPrice)
+                .sum();
     }
 
     //3. Метод, который печатает содержимое корзины, с проверкой на пустоту
@@ -38,28 +34,21 @@ public class ProductBasket {
         }
 
         //Печать товаров по категориям (в перспективе на расширение магазина)
-        for (Map.Entry<String, List<Product>> entry : productMap.entrySet()) {
-            String name = entry.getKey();
-            List<Product> products = entry.getValue();
-
-            System.out.println("=== " + name + " ===");
-            for (Product product : products) {
-                System.out.println(product);
-            }
-        }
-
-        //Подсчёт спецтоваров
-        int specialCounter = 0;
-        for (List<Product> products : productMap.values()) {
-            for (Product product : products) {
-                if (product.isSpecial()) {
-                    specialCounter++;
-                }
-            }
-        }
+        productMap.forEach((name,products)->{
+            System.out.println("=== "+name+" ===");
+            products.forEach(System.out::println);
+        });
 
         System.out.println("Итого: " + getTotalCost() + "₽");
-        System.out.println("Специальных товаров: " + specialCounter);
+        System.out.println("Специальных товаров: " + getSpecialCount());
+    }
+    //Приватный метод для подсчёта спецтоваров
+    private long getSpecialCount() {
+        return productMap.values().stream()
+                .flatMap(List::stream)
+                .filter(Objects::nonNull)
+                .filter(Product::isSpecial)
+                .count();
     }
 
     //4. Метод, проверяющий продукт в корзине по имени

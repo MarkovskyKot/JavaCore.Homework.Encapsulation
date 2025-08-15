@@ -143,5 +143,9 @@ public class Main {
         } catch (BestResultNotFound e) {
             System.out.println(e.getMessage());
         }
+        productBasket.addProduct(product0);
+        productBasket.addProduct(product5);
+        productBasket.addProduct(product3);
+        System.out.println("TotalCost = " + productBasket.getTotalCost());
     }
 }
