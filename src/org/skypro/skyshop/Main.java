@@ -75,8 +75,6 @@ public class Main {
         productBasket.getProductsList();
 
 
-
-
         Article article0 = new Article("Обзор PlayStation 5", "Могу ли я рекомендовать PS5 к покупке?" +
                 " Скорее да, чем нет." +
                 " Но при условии, что вы любите играть" +

@@ -34,14 +34,15 @@ public class ProductBasket {
         }
 
         //Печать товаров по категориям (в перспективе на расширение магазина)
-        productMap.forEach((name,products)->{
-            System.out.println("=== "+name+" ===");
+        productMap.forEach((name, products) -> {
+            System.out.println("=== " + name + " ===");
             products.forEach(System.out::println);
         });
 
         System.out.println("Итого: " + getTotalCost() + "₽");
         System.out.println("Специальных товаров: " + getSpecialCount());
     }
+
     //Приватный метод для подсчёта спецтоваров
     private long getSpecialCount() {
         return productMap.values().stream()
