@@ -75,8 +75,6 @@ public class Main {
         productBasket.getProductsList();
 
 
-
-
         Article article0 = new Article("Обзор PlayStation 5", "Могу ли я рекомендовать PS5 к покупке?" +
                 " Скорее да, чем нет." +
                 " Но при условии, что вы любите играть" +
@@ -143,5 +141,9 @@ public class Main {
         } catch (BestResultNotFound e) {
             System.out.println(e.getMessage());
         }
+        productBasket.addProduct(product0);
+        productBasket.addProduct(product5);
+        productBasket.addProduct(product3);
+        System.out.println("TotalCost = " + productBasket.getTotalCost());
     }
 }
